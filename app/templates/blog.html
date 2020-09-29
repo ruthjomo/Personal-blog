@@ -29,5 +29,12 @@
 
        
     </div>
+    <div class="col-md-4">
+        {% for commen in comment  %}
+        <ul>
+            <li> {{commen.comment}}</li>
+        </ul>
+        {% endfor %}
+    </div>
 </div>
 {% endblock%}
