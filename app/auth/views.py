@@ -45,4 +45,9 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("main.index"))
-    
+
+@auth.route('/blog', methods=['GET', 'POST'])
+def blog ():
+    if blog_post():
+        mail_message("A new blog","email/posts_user",
+        user.email, user=user)
