@@ -19,7 +19,7 @@ class User(UserMixin, db.Model):
     pass_secure = db.Column(db.String(240))
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
-    pitches = db.relationship('Pitch', backref='user', lazy="dynamic")
+    pitches = db.relationship('Blog', backref='user', lazy="dynamic")
     # comments = db.relationship('Comment',backref = 'user',lazy = "dynamic")
     # post_likes = db.relationship('PostLikes', backref=db.backref('user', lazy='joined'),
     # lazy='dynamic', cascade='all, delete-orphan')
@@ -50,8 +50,9 @@ class Role(db.Model):
         return f'User {self.name}'
 
 
-class Pitch(db.Model):
-    __tablename__ = 'pitches'
+class
+ Blog(db.Model):
+    __tablename__ = 'blogs'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     pitch = db.Column(db.String(1000))
@@ -66,15 +67,15 @@ class Pitch(db.Model):
     #
     #     self.pitch = pitch
 
-    def save_pitch(self):
+    def save_blog(self):
         db.session.add(self)
         db.session.commit()
 
     @classmethod
-    def get_pitches(cls, id
+    def get_blogs(cls, id
     ):
-        pitches = Pitch.query.order_by(Pitch.posted.desc())
-        return pitches
+        blogs = blog.query.order_by(blog.posted.desc())
+        return blogs
 
 
 class Comment(db.Model):
@@ -84,7 +85,7 @@ class Comment(db.Model):
     comment = db.Column(db.String(240))
     posted = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    pitch_id = db.Column(db.Integer, db.ForeignKey("pitches.id"))
+    blog_id = db.Column(db.Integer, db.ForeignKey("blogs.id"))
 
     # def __init__(self,id,title,comment):
     #     self.id = id
@@ -97,5 +98,5 @@ class Comment(db.Model):
 
     @classmethod
     def get_comments(cls, id):
-        comments = Comment.query.filter_by(pitch_id=id).all()
+        comments = Comment.query.filter_by(blog_id=id).all()
         return comments
