@@ -19,7 +19,7 @@ class User(UserMixin, db.Model):
     pass_secure = db.Column(db.String(240))
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
-    pitches = db.relationship('Blog', backref='user', lazy="dynamic")
+    blogs = db.relationship('Blog', backref='user', lazy="dynamic")
     # comments = db.relationship('Comment',backref = 'user',lazy = "dynamic")
     # post_likes = db.relationship('PostLikes', backref=db.backref('user', lazy='joined'),
     # lazy='dynamic', cascade='all, delete-orphan')
@@ -55,7 +55,7 @@ class
     __tablename__ = 'blogs'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
-    pitch = db.Column(db.String(1000))
+    blog = db.Column(db.String(1000))
     posted = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     # comments= db.relationship('Comment', backref='title', lazy='dynamic')
