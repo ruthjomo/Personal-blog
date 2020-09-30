@@ -23,7 +23,7 @@ def register():
         #              "email/welcome", user.email, user = user)
         return redirect(url_for("auth.login"))
     title = "Sign Up to personal-blog"
-    return render_template("auth/signup.html", 
+    return render_template("auth/register.html", 
                             signup_form = signup_form,
                             title = title)
 
