@@ -84,7 +84,7 @@ def edit_post(id):
         db.session.commit()
         return redirect(url_for("main.post", id = post.id))
 
-    return render_template("edit_post.html", 
+    return render_template("edit_blog.html", 
                             post = post,
                             edit_form = edit_form)
 
