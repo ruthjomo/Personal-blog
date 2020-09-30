@@ -20,7 +20,7 @@ Support and contact details
 You can provide feedback or raise any issues/ bugs through the following means: Email: ruthjomo19@gmail.com
 
 ## Live Site link
-You can view the live application by following 
+You can view the live application by following https://jomo-blog.herokuapp.com/
 
 ## License
 MIT License
