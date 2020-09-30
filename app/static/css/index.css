@@ -1,4 +1,5 @@
-body{
-    background-image:url("../photos/istockphoto-1133320303-170667a.jpg");
-    background-size:cover;
+.masthead .container{
+    background-image: url("../photos/images.jpeg");
+    margin-top:40px;
+    
 }

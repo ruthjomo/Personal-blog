@@ -1,90 +1,79 @@
- 
 {% extends 'base.html'%}
-{% import 'bootstrap/wtf.html' as wtf %}
-
-{% block styles%}
-    {{super()}}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/profile.css')}}">
-{% endblock%}
-
 {% block content %}
-<div class="container">
-  <div class="row">
-  <!-- displaying  Username-->
-    <div class="col-md-4">
-      <h3> {{user.username| capitalize}} </h3>
-
-      <!--Displaying user bio-->
-      {% if user.bio %}
-        <p> {{user.bio}}</p>
-      {%else%}
-        <p> {{user.username| capitalize}} has no bio </p>
-      {% endif %}
-    </div>
-
-    <!--Display profile photo-->
-    <div class="col-md-4">
-
-      {% if user.profile_pic_path %}
-        <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt="" class="img-thumbnail">
-        {%else%}
-        <p>No profile picture</p>
-      {% endif %}
-
-      {% if user == current_user %}
-        <form  action="{{url_for('main.update_pic',uname=user.username)}}" method="post" enctype = "multipart/form-data">
-
-          <input type="file"  name="photo" class="form-control" required>
-          <input type="submit">
-        </form>
-      {% endif %}
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-2 col-lg-2 col-sm-0"></div>
-    <div class="col-md-8 col-sm-12 col-lg-8">
-      <ul class="list-group">
-        {% for blog in blogs%}
-        <li class="list-group-item">
-            
-            <div class="card w-75">
-              <div class="card-body">
-                <h4 class="card-title"><span class="badge badge-default">Date Posted: <span class="badge badge-light">{{pitch.posted.strftime('%Y-%m-%d')}}</span></span>----<span class="badge badge-default">Pitch Category: <span class="badge badge-light">{{pitch.pitch_category}}</span></span></h4>
-                <p class="card-text">{{pitch.pitch}}</p>
-                {% if blog.user==current_user%}
-                <div>
-                  <a href="{{url_for('main.update',pname=blog.id)}}" class="btn btn-primary btn-sm">Update</a>
-                  <button type="button" class="btn btn-danger btn-sm m-2" data-toggle="modal" data-target="#deleteModal" href="{{url_for('main.delete_pitch',pitch_id=pitch.id)}}">Delete</button>
+<div class="container content">
+    <div class="row profile">
+        <div class="col-md-3">
+            <div class="profile-sidebar position-fixed">
+                <!-- SIDEBAR USERPIC -->
+                {%if user.username == 'kilewa'%}
+                <div class="profile-userpic">
+                    <img src="https://avatars1.githubusercontent.com/u/49271447?s=460&v=4"
+                        class="img-responsive" alt="" height="250" width="250">
                 </div>
-                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Delete this post</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-footer ">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <form action="{{url_for('main.delete_blog',blog_id=blog.id)}}" method="POST">
-                            <input class="btn btn-danger" type="submit" value="Delete">
-                        </form>
-                      </div>
+                {%else%}           
+                <div class="profile-userpic">
+                    <img src="https://image.ibb.co/jw55Ex/def_face.jpg"
+                    class="img-responsive" alt="" height="250" width="250">
+                </div>
+                {%endif%}
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        <strong>{{user.first_name}} {{user.last_name}}</strong>
                     </div>
-                  </div>
+                    <div class="profile-usertitle-job">
+                        <small>{{user.username}}</small>
+                    </div>
+                    {%if user.bio%}
+                    <p>{{user.bio}}</p>
+                    {%else%}
+                    <p>No bio</p>
+                    {%endif%}
                 </div>
-                {%endif%}                          
-              </div>
+                <!-- END SIDEBAR USER TITLE -->
+                <!-- SIDEBAR MENU -->
+                {%if current_user.is_authenticated%}
+                <hr>
+                <div class="profile-usermenu sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('main.update_profile', id = user.id)}}">
+                                <i class="fas fa-user-edit"></i>
+                                Account Settings </a>
+                        </li>
+                    </ul>
+                </div>
+                {%endif%}
+                <!-- END MENU -->
             </div>
-        </li>
-        {% endfor%}
-      </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="profile-content">
+                {%for post in posts[::-1]%}
+                <div class="post-preview">
+                    {%if current_user.is_authenticated%}
+                    <div style="float: right; padding-bottom: 50px">
+                        <a href="{{url_for('main.edit_post', id = post.id)}}" class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i></a>
+                        <a href="{{url_for('main.delete_post', id = user.id, post_id = post.id)}}" class="btn btn-outline-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                    </div>
+                    {%endif%}
+                    <a href="{{url_for('main.post', id = post.id)}}">
+                        <h2 class="post-title">
+                            {{post.post_title}}
+                        </h2>
+                        <h3 class="post-subtitle">
+                            {{post.post_content | truncate(45) | safe}}
+                        </h3>
+                    </a>
+                    <div class="post-meta">Posted By
+                        <a href="/profile/{{post.user_id}}">{{post.post_by}}</a>
+                        on {{post.posted_at.strftime('%B %d, %Y')}}
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+        </div>
     </div>
-    <div class="col-md-2 col-lg-2 col-sm-0"></div>
 </div>
 
-</div>
-{% endblock %}
+{%endblock%}

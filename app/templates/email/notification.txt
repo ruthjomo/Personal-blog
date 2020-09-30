@@ -1,2 +1,2 @@
-Hello {{user.username}}
+Hello,
 A new blog has been posted on the Blog website.Check it out for fun!
